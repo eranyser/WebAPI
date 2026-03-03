@@ -15,6 +15,33 @@ Content-Type: application/json
 "Buy Coffee Beans"
 
 ###
+PUT {{host}}/api/todo-items/1
+Content-Type: application/json
+
+"Updated: Feed the cat"
+
+###
+DELETE {{host}}/api/todo-items/1
+
+###
+POST {{host}}/api/todo-items
+Content-Type: application/json
+
+{
+    "description": "Go to eat",
+    "assignedTo": "Me"  
+}
+
+###
+PUT {{host}}/api/todo-items/1
+Content-Type: application/json
+
+{
+    "description": "Go to the supermarket",
+    "assignedTo": "Me"  
+}
+
+###
 POST {{host}}/tot
 Content-Type: application/json
 
