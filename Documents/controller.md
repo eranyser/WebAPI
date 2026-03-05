@@ -169,16 +169,15 @@
 
 **Bibliography:**
 
-[![Watch the video](https://i.ytimg.com/vi/-O0UYM0ZIIc/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDbNRYNMEmt4sGKqGGZJGzFsrrmNQ)](https://www.youtube.com/watch?v=-O0UYM0ZIIc&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=20&pp=iAQB)
+[Controller in ASP.NET Core](https://www.youtube.com/watch?v=-O0UYM0ZIIc&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=20&pp=iAQB)
+
+[![Controller in ASP.NET Core](https://i.ytimg.com/vi/-O0UYM0ZIIc/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDbNRYNMEmt4sGKqGGZJGzFsrrmNQ)](https://www.youtube.com/watch?v=-O0UYM0ZIIc&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=20&pp=iAQB)
 
 [HTL Perg: Mobile Computing and C# Course - Part 2 (ASP.NET Core Fundamentals) **44:36**](https://www.youtube.com/watch?v=SpXNoqPJDwU&list=PLhGL9p3BWHwtV_hn6H_uZ4vrFE3F7mY8a&index=2&t=2725s&pp=iAQB)
 
 [![Watch the video](https://i.ytimg.com/vi/SpXNoqPJDwU/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAnVeJkF4Vor0M6vFNAKMGSiPBG6Q)](https://www.youtube.com/watch?v=SpXNoqPJDwU&list=PLhGL9p3BWHwtV_hn6H_uZ4vrFE3F7mY8a&index=2&t=2725s&pp=iAQB)
 
-[C# ASP.NET 5 - Dependency Injection, RESTful Web APIs, Generating Swagger **18:48**](https://www.youtube.com/watch?v=ksy8LK5M1Ts&list=PLhGL9p3BWHwtHPWX8g7yJFQvICdNhFQV7&index=26&t=1128s&pp=iAQB)
-
-[![More on Controllers](https://i.ytimg.com/vi/ksy8LK5M1Ts/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLB_KTRMIYHfCNICxOCNUfbHxH9IvQ)](https://www.youtube.com/watch?v=ksy8LK5M1Ts&list=PLhGL9p3BWHwtHPWX8g7yJFQvICdNhFQV7&index=26&t=1128s&pp=iAQB)
-
 - The sides for this are taken from the mobile course:
   - [htl-mobile-computing-5](https://github.com/rstropek/htl-mobile-computing-5) given in 2019/20, [slides](https://htl-mobile-computing-5.azurewebsites.net/#/)
   - [htl-mobile-computing](https://github.com/rstropek/htl-mobile-computing) given in 2018/19, [slides](https://rstropek.github.io/htl-mobile-computing/#/). This is an older version of the same course, includes lot of issues that are missing in the first github repository.
+  - [htl-csharp](https://github.com/rstropek/htl-csharp) earlier coures [slides](https://rstropek.github.io/htl-csharp/#/)
