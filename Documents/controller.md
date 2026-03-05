@@ -2,12 +2,12 @@
 
 #### What is a Controller
 
-- A controller gather together, in a simple class, all c# methods that implement a set of logically connected web  APIs. We put together things that logically belong together in a single class and we call this class a controller.
+- A controller gathers together, in a simple class, all c# methods that implement a set of logically connected web  APIs. We put together things that logically belong together in a single class and we call this class a controller.
 - The controller in a Web API **inherits from ControllerBase.** This marks this class to be ASP.NET Core Controller. ControllerBase is the base class for all API Controllers.
 - Additionally, in order to tell ASP.NET Core that we really want to write Web API, we need to specify the attribute **[ApiController]**
   ```c#
   [ApiController]
-  public class EmployeeController : ControllerBase
+  public class ToDoItemsController : ControllerBase
   {
 
   }
@@ -15,140 +15,155 @@
 
 #### What are attributes
 
-- Attributes are passive addition to the class, they don't implement code. Can influence how code executed. This attribute can be interpreted by  somebody. (for example by reflection)
-- Example of attribute is the one mentioned above **[ApiController]** - attribute that tells the interpreter to treat this class differently, i.e. as a controller.
+- It is similar to *Decorator* in javascript and *Annotation* in java 
+- Attributes are passive addition to the class, they don't implement code. Can influence how code executed. They don't implement anyting. It doen's generate machind code or intermidiate language code. This attribute can be interpreted by somebody. (for example by reflection)
+- Example of attribute is the one mentioned above **[ApiController]** - attribute that tells the interpreter to treat this class differently, i.e. as a controller. It is interperted at runtime, not compiled at compile time. It doesn't generate code but it influences the kind of processing of this controller class.
 - Another common attributes in the controller class are **Route Attributes** which specify where the controller should be available in terms of HTTP path. For example:
 
   - For the whole *Controller*, we can use:
-    - **[Route("[controller]")]** - Token attribute.  When we say controller in the path we mean to use the name of the class, for example, the Class *EmployeeController*, without the suffix controller. I.e, we can navigate to **http://localhost:5000/employee**
-    - **[Route("api/employee")]** - We can specify our own route to the whole controller. I.e we can navigate to **http://localhost:5000/api/employee**
-  - For Action, we can also add routes:
-    - **[Route("item")]** - we need a route also to the action.
-    - **[Rout("[action]")]**  - Same we can specify the action keyword for the methods.
-    - **[Route("[controller]/[action]")]** - or we can combine theme togeter
-- [Pay attention to diference between Attributes and Filters](AttributesVSFilters.md)
-- Before continue adding new APIs, there is an article related to [Choosing between controller-based APIs and minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/apis?view=aspnetcore-8.0)
-- Lets add some APIs:
-
-  - We want to make the Employee's list availabe to the WebAPI, so we add a function *GetAllEmployees*, adding the attribute **[HttpGet]**, and return the http status code, **Ok** in our case, and give it the content of the result.
-  - The return type is *IActionResult*. which is encapsulation of status code and content.
-  - Of course we've added to the EmpolyeeRepository interface and implementation the corresponding metod.
-
-  ```c#
-  namespace Employees.Controllers
-  {
+    - **[Route("[controller]")]** - Token attribute. 
+      ```c#
       [ApiController]
       [Route("[controller]")]
-      public class EmployeeController : ControllerBase
+      public class ToDoItemsController : ControllerBase
       {
-          private readonly IEmployeeRepository _employeeRepository;
-          public EmployeeController(IEmployeeRepository employeeRepository)
-          {
-              _employeeRepository = employeeRepository;
-          }
 
-          [HttpGet]
-          public IActionResult GetAllEmployees()
-          {
-              return Ok(_employeeRepository.GetAllEmployees());
-          }
-
-          [HttpGet]
-          [Route("{id:int}")]
-          public Employee GetEmployeeById(int id)
-          {
-              return _employeeRepository.GetEmployeeById(id);
-          }
       }
+      ```
+      When we say controller in the path we mean to use the name of the class without the suffix controller. For example, in the Class *ToDoItemController*, we can navigate to **http://localhost:5000/ToDoItems**
+    - **[Route("api/todo-items")]** - We can specify our own route to the whole controller. I.e we can navigate to **http://localhost:5000/api/todo-items**
+      ```c#
+      [ApiController]
+      [Route("api/todo-items")]
+      public class ToDoItemsController : ControllerBase
+      {
+
+      }
+      ```
+
+  - For Action, we can also add routes:
+    - **[Route("item")]** - we need a route also to the action.
+    - **[Route("[action]")]**  - Same we can specify the action keyword for the methods.
+    - **[Route("[controller]/[action]")]** - or we can combine theme togeter
+
+- [Pay attention to diference between Attributes and Filters](AttributesVSFilters.md)
+
+- Before continue adding new APIs, there is an article related to [Choosing between controller-based APIs and minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/apis?view=aspnetcore-8.0)
+
+- Regarding *Routing Rules* you can read more [here](routing.md)
+
+- Lets add some APIs:
+  ```c#
+  namespace ToDoItems.Controllers
+  {
+    [ApiController]
+    [Route("api/todo-items")]
+    public class ToDoItemsController : ControllerBase
+    {
+      private static readonly List<string> items =
+        new List<string> { "Clean my room", "Feed the cat" };
+
+      [HttpGet]
+      public IActionResult GetAllItems()
+      {
+        return Ok(items);
+      }
+    }
   }
   ```
 
-  - To get *EmployeeList* according current *routing rules* we use: https://localhost:7156/employee
-  - We already added the method *GetEmployeeById*, lets refine it with some validation checks, if null is returned from the list the API returns BadRequest.
+  - First we add a list of *items*. it is ***private static readonly*** which make it:
+    -  **private**: available / accessible only from this class
+    -  **static**: Make no need to create an instance of *ToDoItemsControler* class to access the list. There is a single *items* list for **all** *TodoItemsController*'s. 
+       
+       **An important thing to understand is that we have many TodoItemsController's. For any HTTP request we get a new TodoItemsController, and the list of items should be kind of a database. In our case it's just in-memory, and the *static* causes the list to be only one for all *TodoItemsController's***
+    - **readonly**: The value of the list can be assigned only once, and can't be change anymore.
+
+  - We want to make the *itmes* list availabe to the WebAPI, so we add a function *GetAllItems*, adding the attribute **[HttpGet]**, and return the http status code, **Ok** in our case, and give it the content of the result.
+  - The return type is *IActionResult*. which is encapsulation of status code and content.
+  - To get the *items* List according current *routing rules* we use: https://localhost:5000/api/todo-items
+
+- Let's add the method to get an item by its *index*
+  ```c#
+  [HttpGet]
+  [Route("{index}", Name = "GetSpecificItem")]
+  public IActionResult GetItem(int index)
+  {
+    if (index >= 0 && index < items.Count)
+    {
+      return Ok(items[index]);
+    }
+    return BadRequest("Invalid index");
+  }
+  ```
+    - In the **Route** attribute there is a curly braces. Theas means that part of the route is a **variable** that refers the first parameter of the method. To get a speicific item we can use: https://localhost:5000/api/todo-items/1. This will return the item with index "1". We will talk about it in the [routing rules](routing.md) page.
+
+- Now lets add the method *AddItem*
 
     ```c#
-    [HttpGet]
-    [Route("{id:int}")]
-    public IActionResult GetEmployeeById(int id)
-    {
-        Employee? employee = _employeeRepository.GetEmployeeById(id);
-        if (employee != null)
-            return Ok(employee);
-        else
-            return BadRequest("No Such Id");
-    }
+		[HttpPost]
+		public IActionResult AddItem([FromBody] string newItem)
+		{
+			items.Add(newItem);
+			return CreatedAtRoute("GetSpecificItem", new { index = items.IndexOf(newItem) }, newItem);
+		}
     ```
-
-    - In the **Route** attribute there is a  curly braces. Theas means that inside of it, it is a variable that refers the first parameter of the method. We will talk about it in the [routing](routing.md) page.
-  - Now lets add the method *AddEmployee*
-
-    ```c#
-    [HttpPost]
-    public IActionResult AddEmployee([FromBody] Employee newEmployee) 
-    {
-        Employee addedEmployee = _employeeRepository.AddEmployee(newEmployee);
-        return CreatedAtRoute("GetSpecificEmployee", new { Id = addedEmployee.Id }, addedEmployee);
-    }
-    ```
-
-    - We set the **[HttpPost]** attribute, it is an *insert*. We add an **Employee**
-    - We also *decorate* the parameter with attribute **[FromBody]**. This means, takes the new Employee item from the **HTTP Body**
-    - We return value using the *CreatedAtRoute* mehtod. It is good practice to return the *location* header, so we will be able to get the newly created Emloyee. The first paremeter to the method is the *Name* atribute at the method that brings the item, so we have to add *Name* to the *GetEmployeeById* method.
-    - We actually say, there is a **Route**, named **GetSpecificEmployee** that we can query the new added item, giving its index for this route. The last parameter will be returned as a response body. Usually, it is just the value of newly created resource.
+    - We set the **[HttpPost]** attribute, it is an *insert*. We add a new item string.
+    - In addition we also *decorate* the parameter with attribute **[FromBody]**. This means, takes the new string item from the **HTTP Body**
+    - We return value using the *CreatedAtRoute* mehtod. It is good practice to return the *location* header, so we will be able to get the newly created string item. The first paremeter to the method is the *Name* atribute at the method that brings the item, so we have to add *Name* to the *GetItem* method.
+    - We actually say, there is a **Route**, named **GetSpecificItem** that we can query the new added item, giving its index for this route. The last parameter will be returned as a response body. Usually, it is just the value of newly created resource.
     - **More reading and explanations:** [Created, CreatedAtAction, CreatedAtRoute Methods In ASP.NET Core Explained With Examples](https://ochzhen.com/blog/created-createdataction-createdatroute-methods-explained-aspnet-core)
-  - Lets add the *UpdateEmployee* method
 
+- Lets add the *UpdateItem* method
     ```c#
     [HttpPut]
-    [Route("{id:int}")]
-    public IActionResult UpdateEmpoyee(int id, [FromBody] Employee updatedEmployee)
+    [Route("{index}")]
+    public IActionResult UpdateItem(int index, [FromBody] string newItem)
     {
-        Employee? employee = _employeeRepository.UpdateEmploeye(id, updatedEmployee);
-        if (employee != null)
-            return Ok(employee);
-        else
-            return BadRequest($"No Employee with  Id: {id}");
-
+      if (index >= 0 && index < items.Count)
+      {
+        items[index] = newItem;
+        return Ok();
+      }
+      return BadRequest("Invalid index");
     }
     ```
 
     - In this method we use the **[HttpPut]** attribute
     - We are combining the *Route* parameter, **id**, with the data from **[FromBody]** attribute. This is because we want to update specific item.
-  - *DeleteEmployee* will look like this:
+  
+- *DeleteItem* will look like this:
 
     ```c#
-    [HttpDelete]
-    [Route("{id:int}")]
-    public IActionResult DeleteEmployee(int id)
+    [HttpDelete] 
+    [Route("{index}")]
+    public IActionResult DeleteItem(int index)
     {
-        if (_employeeRepository.DeleteEmployee(id))
-        {
-            return NoContent();
-        }
-        else
-        {
-            return BadRequest($"No Employee with Id: {id}");
-        }
+      if (index >= 0 && index < items.Count)
+      {
+        items.RemoveAt(index);
+        return NoContent();
+      }
+
+      return BadRequest("Invalid index");
     }
     ```
-  - As we saw the **[FromBody]** attribute that tells .net that the data comes from the body of the requeset, we can set the attribute **[From Query]** to indicate, for a parameter, that it comes from the query string.
-- As you can see, the CRUD API we created, can be distinguished according the *VERB* we send and the paremeter:
-  ![Swagger API](../tutorial_images/swagger_api.png)
+- As we saw the **[FromBody]** attribute that tells .NET that the data comes from the body of the requeset, we can set the attribute **[From Query]** to indicate, for a parameter, that it comes from the query string. A query string comes after a question mark.
+  - In the next method we request a sorted list of items, we set the *routing rules* to be **sorted** and add a *query string* parameter - *sortOrder* that can be **'asc' or 'desc'**. To get a sorted item list we can use: https://localhost:5000/api/todo-items/sorted?sortOrder=desc
 
-  - Get the list of Employees uses **GET https://localhost:7156/employee** wheras update employee uses **POST https://localhost:7156/employee**. Both URLs are the same.
-  - We can add a route with name that implies the operation. If we want the default route to remain we need to add **[Route("")]**
     ```c#
-    [HttpGet] 
-    [Route("")]
-    [Route("all")]
-    public IActionResult GetAllEmployees()
+    [HttpGet]
+    [Route("sorted")]
+    public IActionResult GetAllItemsSorted([FromQuery] string sortOrder)
     {
-        return Ok(_employeeRepository.GetAllEmployees());
-    } 
+      return sortOrder switch
+      {
+        "desc" => Ok(items.OrderByDescending(item => item)),
+        "asc" => Ok(items.OrderBy(item => item)),
+        _ => BadRequest("Invalid or missing sortOrder query parameter")
+      };
+    }
     ```
-  - Now we can get the employee list with the following calls:
-    - **GET https://localhost:7156/employee**
-    - **GET https://localhost:7156/employee/all**
 
 [Back to Table of Content](../README.md#02-webapi-basic-conceptes)
 
